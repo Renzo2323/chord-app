@@ -13,7 +13,7 @@ A simple music theory tool for exploring chords, scales, and practicing ear trai
 
 ## Installation
 
-- Download the installer from GitHub Releases.
+- Download the installer [here](https://github.com/Renzo2323/chord-app/releases/latest).
 - Run the installer.
 - The app should open and appear in your Start menu.
   - If a shortcut isn't available, the app directory can be found by navigating to `%LOCALAPPDATA%\chord-app` in your file explorer.
