@@ -24,7 +24,7 @@ A simple music theory tool for exploring chords, scales, and practicing ear trai
 
   ![App Screenshot](./screenshots/main.png)
 
-  The app's layout is divided into three areas:
+  The app's layout is divided into four areas:
 
   - Piano display (Top)
   - Settings (Left)
