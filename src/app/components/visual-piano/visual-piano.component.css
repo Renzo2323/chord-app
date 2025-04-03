@@ -1,0 +1,175 @@
+.piano-full{
+    display:inline-flex
+}
+
+.piano-key{
+    color: black;
+    background-image: url(../../../../public/images/keys.png);
+    background-position-x: 0px;
+    background-position-y: 0px;
+    background-size: calc(79px * var(--scale-multiplier));
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    width: calc(13px * var(--scale-multiplier));
+    height: calc(54px * var(--scale-multiplier));
+    position: relative;
+    pointer-events: auto;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.piano-key.first{
+    background-position-x: 0px;
+}
+
+.piano-key.first.held{
+    background-position-y: calc(-56px * var(--scale-multiplier));
+}
+
+.piano-key.white-left{
+    background-position-x: calc(-13px * var(--scale-multiplier));
+}
+
+.piano-key.white-left.held{
+    background-position-y: calc(-56px * var(--scale-multiplier));
+}
+
+.piano-key.white-right{
+    background-position-x: calc(-26px * var(--scale-multiplier)); 
+    margin-left: calc(-1px * 3);
+}
+
+.piano-key.white-right.held{
+    background-position-y: calc(-56px * var(--scale-multiplier));
+}
+
+.piano-key.white-left-right{
+    background-position-x: calc(-39px * var(--scale-multiplier));
+}
+
+.piano-key.white-left-right.held{
+    background-position-y: calc(-56px * var(--scale-multiplier));
+}
+
+.piano-key.last{
+    background-position-x: calc(-52px * var(--scale-multiplier));
+    margin-left: calc(-1px * var(--scale-multiplier));
+}
+
+.piano-key.last.held{
+    background-position-y: calc(-56px * var(--scale-multiplier));
+}
+
+.piano-key.black{
+    background-position-x: calc(-65px * var(--scale-multiplier));
+    width: calc(7px * var(--scale-multiplier));
+    height: calc(35px * var(--scale-multiplier));
+
+    z-index: 0;
+}
+
+.piano-key.black.held{
+    background-position-x: calc(-72px * var(--scale-multiplier));
+}
+
+.piano-key-label{
+    position: absolute;
+    bottom: 20px;
+    font-size: 13px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    opacity: 0.7;
+    color: #e14d03;
+    z-index: 20;
+}
+
+.piano-key-label.black{
+    top: 20px;
+    bottom: unset;
+    z-index: 5;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: -5px;
+    color: #cbdaff;
+}
+
+.piano-key-label.black:has(~ .piano-key.black.held){
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.piano-key-label.black:has(~ .piano-key.black.highlighted) {
+    color: black;
+}
+
+.piano-key-wrapper{
+    position: relative;
+    top: 0px;
+    transition: top 0.3s;
+    pointer-events: none;
+}
+
+.piano-key-wrapper:has(.piano-key.held){
+    top: calc(2px * var(--scale-multiplier));
+}
+
+.piano-key-wrapper:has(.piano-key.black){
+    margin-left: calc(-4px * var(--scale-multiplier));
+    margin-right: calc(-4px * var(--scale-multiplier));
+}
+
+
+.piano-key.highlighted {
+    background-color: rgb(255 225 85);
+    background-blend-mode: multiply;
+}
+
+.piano-key:hover{
+    background-color: rgb(255, 233, 138);
+    background-blend-mode: multiply;
+}
+
+.piano-key.highlighted:hover {
+    background-color: rgb(255 203 58);
+    background-blend-mode: multiply;
+}
+
+.piano-key.black.highlighted {
+    background-color: #ffc368;
+    background-blend-mode: overlay;
+    box-shadow: inset 0px 0px 0px calc(1px* var(--scale-multiplier) - 1px);
+}
+
+.piano-key.black:hover{
+    background-color: #99d4ff7a;
+    background-blend-mode: overlay;
+    box-shadow: inset 0px 0px 0px calc(1px* var(--scale-multiplier) - 1px);
+}
+
+.piano-key.black.highlighted:hover {
+    background-color: rgb(255, 182, 104);
+    background-blend-mode: overlay;
+    box-shadow: inset 0px 0px 0px calc(1px* var(--scale-multiplier) - 1px);
+}
+
+
+.piano-key.white-right,
+.piano-key.first{
+    --vertical-cut: 54%;
+    --horizontal-cut: 70%;
+    clip-path: polygon(var(--horizontal-cut) 0, var(--horizontal-cut) var(--vertical-cut), 100% var(--vertical-cut), 100% 100%, 0 100%, 0 0);
+}
+
+.piano-key.white-left{
+    --vertical-cut: 54%;
+    --horizontal-cut: 25%;
+    clip-path: polygon(var(--horizontal-cut) 0, 100% 0, 100% 100%, 0 100%, 0 var(--vertical-cut), var(--horizontal-cut) var(--vertical-cut));
+}
+
+.piano-key.white-left-right{
+    --vertical-cut: 54%;
+    --horizontal-cut-left: 25%;
+    --horizontal-cut-right: 70%;
+    clip-path: polygon(var(--horizontal-cut-left) 0, var(--horizontal-cut-right) 0, var(--horizontal-cut-right) var(--vertical-cut), 100% var(--vertical-cut), 100% 100%, 0 100%, 0 var(--vertical-cut), var(--horizontal-cut-left) var(--vertical-cut));
+}
+

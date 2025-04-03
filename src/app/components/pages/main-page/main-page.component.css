@@ -1,0 +1,446 @@
+.full-view{
+    height: 100vh; 
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    background-image: url('../../../../../public/images/bg.png');
+    animation: scrollDiagonally 20s linear infinite;
+    background-blend-mode: soft-light;
+    background-color: #ffad00;
+    image-rendering: pixelated;
+    background-repeat: repeat;
+}
+
+@keyframes scrollDiagonally {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 166px 154px;
+    }
+}
+
+.top-section{
+    padding-top: 20px;
+    border-bottom: solid 2px;
+    border-color: #c25b00;
+    padding-bottom: 7px;
+    flex: 0;
+}
+
+.bottom-section{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    min-height: 0;
+}
+
+.section-piano{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.subsection-piano{
+    display:flex;
+    flex-direction: column;
+}
+
+.piano-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.piano-title{
+    margin-bottom: 1px;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+    z-index: 5;
+    margin-left: 12px;
+}
+
+.piano-title::before{
+    content: attr(data-text); 
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    color: black;
+    -webkit-text-stroke: 4px #984400;
+}
+
+.piano-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.section-settings{
+    display: flex;
+    flex-direction: column;
+}
+
+.section-control{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-training{
+    flex: 0.55;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-button{
+    background-color: rgb(255, 196, 0);
+    padding-bottom: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu-button:hover{
+    background-color: rgb(255, 157, 0);
+}
+
+.menu-button-image{
+    width: 13px;
+    margin-bottom: 2px;
+}
+
+.menu-wrapper{
+    margin-bottom: 5px;
+}
+
+.top-bar{
+    width: 100%;
+    height: 23px;
+    background-color: #e75c27;
+    border-right: solid 2px #b10000b3;
+    border-bottom: solid 2px #a61a1a8c;
+    box-sizing: border-box;
+    color: white;
+    letter-spacing: 1px;
+    font-variant-caps: all-small-caps;
+    padding: 0 10px 0 10px;
+    line-height: 20px;
+    box-shadow: inset -1px 4px 0 -2px #ffdd6440, inset 2px -1px 0 0px #bb000052, inset -8px 2px 0 -6px #bb000052;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-content{
+    padding: 15px;
+    flex: 1;
+    box-shadow: inset -4px 0px 0 -2px #3f00004f, inset 1px -1px 0 1px #dc4e008c, inset 0 4px 1px -2px #02020233;
+    background-color: #a42916;
+    color: white;
+    overflow: auto;
+}
+
+.section-content.grayed-out{
+    background-color: #832213;
+}
+
+.section-content::-webkit-scrollbar{
+    display: none; 
+}
+
+.section-settings > .section-content{
+    width: 220px;
+}
+
+.setting-group{
+    margin-bottom: 8px;
+}
+
+.setting{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+.strong-text{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+select{
+    width: 120px;
+}
+
+.chord-button{
+    width: 50px;
+    height: 40px;
+    font-size: 17px;
+    background-color: rgb(255 173 0);
+    border-color: #9f3e00;
+    color: #9c0000;
+    border-style: none;
+    border-left-style: solid;
+    box-shadow: inset 0 0 0 2px #e06d2e6e, inset 1px -1px 0 1px #dc4e008c;
+    cursor: pointer;
+}
+
+.chord-button:hover{
+    background-color: rgb(255, 170, 0);
+}
+
+.chord-button:active{
+    background-color: rgb(255, 157, 0);
+}
+
+.scale-chords{
+    border: solid #ab4b00 2px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 0 2px #ff8c0ecc;
+    width: fit-content;
+}
+
+.chord-button:first-child{
+    border-left-style: unset;
+    
+}
+
+.toggle-switch{
+    display: flex;
+    margin-bottom: 8px;
+    font-variant-caps: all-small-caps;
+    align-items: center;
+}
+
+.switch-option{
+    padding-bottom: 4px;
+}
+
+.chord-displayer-container{
+    display: flex; 
+    gap: 12px; 
+    align-items: center;
+    height: 27px;
+}
+
+.chord-displayer{
+    font-size: 24px;
+    color: #ff6d00;
+    position: relative;
+    font-family: 'Lexend';
+    font-weight: bold;
+    padding-top: 4px;
+    transform: translate(0);
+}
+
+.chord-displayer.notes{
+    font-size: 17px;
+    color: #ffc258;
+}
+
+.chord-displayer::before{
+    content: attr(data-text); 
+    position: absolute;
+    z-index: -1;
+    left: 0;
+}
+
+.chord-displayer::before{
+    color: black;
+    -webkit-text-stroke: 3px #641a00;
+}
+
+.chord-displayer.notes::before{
+    color: black;
+    -webkit-text-stroke: 3px #b43405;
+}
+
+.vertical-label{
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.chord-advanced-options{
+    display:flex;
+    flex-direction: column;
+}
+
+.chord-set{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.chord-icon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.chord-number{
+    padding: 5px 5px 5px 5px;
+}
+
+.chord-note-image{
+    width: 21px;
+}
+
+.chord-number.triad {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    letter-spacing: -2px;
+    padding: 5px 0 10px 0;
+}
+
+.chord-quality-buttons{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding: 3px 0 3px 0;
+}
+
+.chord-quality-buttons-column{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chord-quality-button {
+    background-color: #892318;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 2px;
+    border-color: #c65e33;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.chord-quality-button:hover{
+    background-color: #7e1e14;
+}
+
+.chord-quality-button.diminished.active {
+    background-color: #2aa8cd;
+    border-color: #21ce97;
+}
+
+.chord-quality-button.minor.active {
+    background-color: #704eff;
+    border-color: #6b8dff;
+}
+
+.chord-quality-button.perfect.active {
+    background-color: #2d9a33;
+    border-color: #5cc12b;
+}
+
+.chord-quality-button.major.active {
+    background-color: #df1a1a;
+    border-color: #fb4c54;
+}
+
+.chord-quality-button.augmented.active {
+    background-color: #f75919;
+    border-color: #ff9d4a;
+}
+
+.chord-quality-button.sus2,
+.chord-quality-button.sus4 {
+    width: 44px;
+}
+
+.chord-quality-button.sus2.active {
+    background-color: #857b88;
+    border-color: #92adcc;
+}
+
+.chord-quality-button.sus4.active {
+    background-color: #e18713;
+    border-color: #e0b954;
+}
+
+.plus-connector {
+    position: absolute;
+    left: 28px;
+    bottom: -5px;
+}
+
+.start-training{
+    margin-bottom: 10px;
+}
+
+.training-button-group {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.training-button-toggle {
+    gap: 4px;
+    display: flex;
+    align-items: center;
+    width: 164px;
+}
+
+.custom-button{
+    flex: 1;
+}
+
+button.custom-button.training-button.correct{
+    background-color: #1cc535;
+    border-color: #8ad439;
+}
+
+button.custom-button.training-button.incorrect{
+    background-color: #e20000;
+    border-color: #ee2c21;
+}
+
+button.custom-button:disabled {
+    background-color: #a2271a;
+    color: #681414;
+    border-color: #7227278a;
+    cursor: unset;
+}
+
+.training-actions{
+    display: flex;
+    gap: 8px;
+    margin-top: 13px;
+    flex-direction: column;
+}
+
+.use-same-root-setting{
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-top: 8px;
+}
+
+.top-section-container{
+    position: relative;
+}
+
+.blur-overlay{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(17px); 
+    background-color: rgb(38 34 32 / 80%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    z-index: 20;
+}

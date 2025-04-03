@@ -1,0 +1,16 @@
+export enum ChordType{
+    MajorTriad,
+    MinorTriad,
+    DimTriad,
+    AugTriad,
+    Sus2,
+    Sus4,
+    Dom7th,
+    Major7th,
+    Minor7th,
+    MinMaj7th,
+    HalfDim7th,
+    Dim7th,
+    Aug7th,
+    AugMaj7th,
+}

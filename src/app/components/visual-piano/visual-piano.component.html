@@ -1,0 +1,14 @@
+<div class="piano-full">
+    @for (key of keys; track $index) {
+        <div class="piano-key-wrapper">
+            @if (key.scaleName) {
+                @if(showLabels){
+                    <div class="piano-key-label" [class.black]="getKeyLook(key.id, key.defaultName, $index) == 'black'">
+                        {{key.scaleName}}
+                    </div>
+                }
+            }
+            <div (mousedown)="pressingKey(key)" class="piano-key" [class.held]="key.held" [class.highlighted]="key.highlighted && highlightKeys" [class]="getKeyLook(key.id, key.defaultName, $index)"></div>
+        </div>
+    }
+</div>

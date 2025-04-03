@@ -1,0 +1,327 @@
+<div class="full-view">
+    <div class="top-section-container">
+        <div class="top-section">
+            <div class="section-piano">
+                <div class="subsection-piano">
+                    <div class="piano-bar">
+                        <div class="piano-title" [attr.data-text]="getScaleTitle()"> {{getScaleTitle()}}</div>
+                        <app-dropdown-menu class="menu-wrapper" [(visible)]="isPianoMenuVisible" [menuItems]="pianoMenuOptions" (itemSelected)="handlePianoMenuSelection($event)" direction="left">
+                            <button class="menu-button" (click)="isPianoMenuVisible = !isPianoMenuVisible">
+                            <img class="menu-button-image" src="svg/menu.svg"/>
+                            </button>
+                        </app-dropdown-menu>
+                    </div>
+                    <div class="piano-container">
+                        <app-visual-piano [scaleMap]="scaleMap" (keyPress)="onVisualPianoKeyPress($event)"/>
+                        <div class="chord-displayer-container">
+                            @if(displayedChordName){
+                                <div class="chord-displayer name" [attr.data-text]="getChordDisplayName().concat(' →')">
+                                    {{getChordDisplayName()}} →
+                                </div>
+                            }
+                            <div class="chord-displayer notes" [attr.data-text]="getChordDisplayNotes()">
+                                {{getChordDisplayNotes()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if(inEarTrainingMode){
+            <div class="blur-overlay">No peeking!</div>
+        }
+    </div>
+    
+    <div class="bottom-section">
+        <div class="section-settings">
+            <div class="top-bar">Settings</div>
+            <div class="section-content">
+                <div class="setting-group">
+                    <label class="strong-text">Scale</label>
+                    <div class="setting">
+                        <label>Tonic</label>
+                        <select class="dark" id="tonic" name="tonic" [(ngModel)]="tonicSelect" (ngModelChange)="onTonicChange($event)">
+                            @for (option of tonicOptions; track $index) {
+                                <option [ngValue]="option">{{option.note}}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="setting">
+                        <label>Quality</label>
+                        <select class="dark" id="modes" name="modes" [(ngModel)]="selectedScale.mode" [value]="Mode.Ionian" (ngModelChange)="onModeChange()">
+                            <option [ngValue]="Mode.Ionian" selected>Major (Ionian)</option>
+                            <option [ngValue]="Mode.Aeolian">Minor (Aeolian)</option>
+                            <option [ngValue]="Mode.Dorian">Dorian</option>
+                            <option [ngValue]="Mode.Phrygian">Phrygian</option>
+                            <option [ngValue]="Mode.Lydian">Lydian</option>
+                            <option [ngValue]="Mode.Mixolydian">Mixolydian</option>
+                            <option [ngValue]="Mode.Locrian">Locrian</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <div class="setting-group">
+                    <label class="strong-text">Audio</label>
+                    <div class="setting">
+                        @if(!loadingInstrument){
+                            <label>Instrument</label>
+                        }@else {
+                            <label>Loading...</label>
+                        }
+                        <select class="dark" id="instruments" name="instruments" [(ngModel)]="instrument" (ngModelChange)="onInstrumentChange()">
+                            @for(instrument of instrumentOptions; track $index){
+                                <option [ngValue]="instrument">{{instrument.name}}</option>
+                            }
+                        </select>
+                    </div>   
+                    <div class="setting">
+                        <label>Volume</label>
+                        <input type="range" min="-30" max="0" [(ngModel)]="volume" (ngModelChange)="onVolumeChange()"/>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <label class="strong-text">Chord </label>
+                    <div class="setting">
+                        <label>Bass note</label>
+                        <label class="switch" style="margin-left: 5px;">
+                            <input type="checkbox" id="bassNote" name="bassNote" [(ngModel)]="useBassNote">
+                            <span class="slider"></span>
+                        </label>
+                    </div>   
+                    <div class="setting">
+                        <label>Arpeggiate</label>
+                        <label class="switch" style="margin-left: 5px;">
+                            <input type="checkbox" id="arpeggiate" name="arpeggiate" [(ngModel)]="arpeggiate">
+                            <span class="slider"></span>
+                        </label>
+                    </div>   
+                    <div class="setting">
+                        <label>Invert diatonic chords</label>
+                        <label class="switch" style="margin-left: 5px;">
+                            <input type="checkbox" id="invert" name="invert" [(ngModel)]="invertDiatonicChords">
+                            <span class="slider"></span>
+                        </label>
+                    </div>   
+                </div>
+            </div>
+        </div>
+            
+
+        <div class="section-control">
+            <div class="top-bar">Chords</div>
+            <div class="section-content" [class.grayed-out]="inEarTrainingMode">
+                @if(!inEarTrainingMode){
+                    <div class="toggle-switch">
+                        <span class="switch-option">Diatonic</span>
+                        <label class="switch" style="margin-left: 5px;">
+                            <input type="checkbox" id="playMode" name="playMode" [(ngModel)]="inAdvancedMode">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-option">Advanced</span>
+                    </div>
+                    <div style="margin-left: 10px;">
+                        @if (!inAdvancedMode) {
+                            <div class="strong-text" style="margin-bottom: 10px;">Diatonic chords</div>
+                            <div class="scale-chords">
+                                @for (chord of getRomanNumeralChords(); track $index) {
+                                    <button class="chord-button" (click)="chordData.scaleDegree = $index + 1; getDiatonicChord(undefined, true)">{{chord}}</button>
+                                }
+                            </div>
+            
+                            <div style="margin-bottom: 5px;">
+                                <label class="vertical-label">Octave</label>
+                                <app-number-input class="dark" [(model)]="octave" width="20px" [min]="1" [max]="7"></app-number-input>
+                            </div>
+            
+                            <div style="margin-bottom: 5px;">
+                                <label class="vertical-label">Extension</label>
+                                <app-number-input class="dark" [(model)]="chordData.extension" width="20px" [min]="1" [max]="6"></app-number-input>
+                            </div>
+                        }@else {
+                            <div style="margin-bottom: 5px;">
+                                <label class="vertical-label">Chord type</label>
+                                <select style="display: block;" class="dark" id="chord-type" name="chord-type" [(ngModel)]="chordType" (ngModelChange)="onChordTypeChange()">
+                                    <option [ngValue]="ChordType.MajorTriad" selected>Major Triad</option>
+                                    <option [ngValue]="ChordType.MinorTriad">Minor Triad</option>
+                                    <option [ngValue]="ChordType.DimTriad">Diminished Triad</option>
+                                    <option [ngValue]="ChordType.AugTriad">Augmented Triad</option>
+                                    <option [ngValue]="ChordType.Sus2">Suspended 2nd</option>
+                                    <option [ngValue]="ChordType.Sus4">Suspended 4th</option>
+                                    <option [ngValue]="ChordType.Dom7th">Dominant 7th</option>
+                                    <option [ngValue]="ChordType.Major7th">Major 7th</option>
+                                    <option [ngValue]="ChordType.Minor7th">Minor 7th</option>
+                                    <option [ngValue]="ChordType.MinMaj7th">Minor Major 7th</option>
+                                    <option [ngValue]="ChordType.HalfDim7th">Half-diminished 7th</option>
+                                    <option [ngValue]="ChordType.Dim7th">Diminished 7th</option>
+                                    <option [ngValue]="ChordType.Aug7th">Augmented 7th</option>
+                                    <option [ngValue]="ChordType.AugMaj7th">Augmented Major 7th</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 5px;">
+                                <label class="vertical-label">Extension</label>
+                                <app-number-input class="dark" [(model)]="advancedChordExtension" width="20px" [min]="3" [max]="6"></app-number-input>
+                            </div>
+                            <div class="chord-advanced-options">
+                                @if(advancedChordExtension > 5){
+                                    <div style="position:relative">
+                                        <div class="chord-set">
+                                            <div class="chord-icon">
+                                                <div class="chord-number" style="padding-left: 0; padding-right: 4px;">
+                                                    11
+                                                </div>
+                                                <div class="chord-note-image">
+                                                    <img src="images/chord-note.png">
+                                                </div>
+                                            </div>
+                                            <div class="chord-quality-buttons">
+                                                <div class="chord-quality-button diminished" [class.active]="chordQuality11th == ChordQuality.Diminished" (click)="chordQuality11th = ChordQuality.Diminished">d</div>
+                                                <div class="chord-quality-button perfect" [class.active]="chordQuality11th == ChordQuality.Perfect" (click)="chordQuality11th = ChordQuality.Perfect">P</div>
+                                                <div class="chord-quality-button augmented" [class.active]="chordQuality11th == ChordQuality.Augmented" (click)="chordQuality11th = ChordQuality.Augmented">a</div>
+                                            </div>
+                                        </div>
+                                        <div class="plus-connector">
+                                            +
+                                        </div>
+                                    </div>
+                                }
+    
+                                @if(advancedChordExtension > 4){
+                                    <div style="position:relative">
+                                        <div class="chord-set">
+                                            <div class="chord-icon">
+                                                <div class="chord-number">
+                                                    9
+                                                </div>
+                                                <div class="chord-note-image">
+                                                    <img src="images/chord-note.png">
+                                                </div>
+                                            </div>
+                                            <div class="chord-quality-buttons">
+                                                <div class="chord-quality-button diminished" [class.active]="chordQuality9th == ChordQuality.Diminished" (click)="chordQuality9th = ChordQuality.Diminished">d</div>
+                                                <div class="chord-quality-button perfect" [class.active]="chordQuality9th == ChordQuality.Perfect" (click)="chordQuality9th = ChordQuality.Perfect">P</div>
+                                                <div class="chord-quality-button augmented" [class.active]="chordQuality9th == ChordQuality.Augmented" (click)="chordQuality9th = ChordQuality.Augmented">a</div>
+                                            </div>
+                                        </div>
+                                        <div class="plus-connector">
+                                            +
+                                        </div>
+                                    </div>
+                                }
+    
+                                @if(advancedChordExtension > 3){
+                                    <div style="position:relative">
+                                        <div class="chord-set">
+                                            <div class="chord-icon">
+                                                <div class="chord-number">
+                                                    7
+                                                </div>
+                                                <div class="chord-note-image">
+                                                    <img src="images/chord-note.png">
+                                                </div>
+                                            </div>
+                                            <div class="chord-quality-buttons">
+                                                <div class="chord-quality-button diminished" [class.active]="chordQuality7th == ChordQuality.Diminished" (click)="chordQuality7th = ChordQuality.Diminished">d</div>
+                                                <div class="chord-quality-button minor" [class.active]="chordQuality7th == ChordQuality.Minor" (click)="chordQuality7th = ChordQuality.Minor">m</div>
+                                                <div class="chord-quality-button major" [class.active]="chordQuality7th == ChordQuality.Major" (click)="chordQuality7th = ChordQuality.Major">M</div>
+                                                <div class="chord-quality-button augmented" [class.active]="chordQuality7th == ChordQuality.Augmented" (click)="chordQuality7th = ChordQuality.Augmented">a</div>
+                                            </div>
+                                        </div>
+                                        <div class="plus-connector">
+                                            +
+                                        </div>
+                                    </div>
+                                    
+                                }
+    
+                                <div class="chord-set">
+                                    <div class="chord-icon">
+                                        <div class="chord-number triad">
+                                            531
+                                        </div>
+                                        <div class="chord-note-image">
+                                            <img src="images/chord-triad.png">
+                                        </div>
+                                    </div>
+                                    <div class="chord-quality-buttons-column">
+                                        <div class="chord-quality-buttons">
+                                            <div class="chord-quality-button diminished" [class.active]="chordQualityTriad == ChordQuality.Diminished && !chordAlteration" (click)="chordQualityTriad = ChordQuality.Diminished; chordAlteration = undefined">d</div>
+                                            <div class="chord-quality-button minor" [class.active]="chordQualityTriad == ChordQuality.Minor && !chordAlteration" (click)="chordQualityTriad = ChordQuality.Minor; chordAlteration = undefined">m</div>
+                                            <div class="chord-quality-button major" [class.active]="chordQualityTriad == ChordQuality.Major && !chordAlteration" (click)="chordQualityTriad = ChordQuality.Major; chordAlteration = undefined">M</div>
+                                            <div class="chord-quality-button augmented" [class.active]="chordQualityTriad == ChordQuality.Augmented && !chordAlteration" (click)="chordQualityTriad = ChordQuality.Augmented; chordAlteration = undefined">a</div>
+                                        </div>
+                                        <div class="chord-quality-buttons">
+                                            <div class="chord-quality-button sus2" [class.active]="chordAlteration == ChordAlteration.Sus2" (click)="chordAlteration = ChordAlteration.Sus2; chordQualityTriad = ChordQuality.Major">sus2</div>
+                                            <div class="chord-quality-button sus4" [class.active]="chordAlteration == ChordAlteration.Sus4" (click)="chordAlteration = ChordAlteration.Sus4; chordQualityTriad = ChordQuality.Major">sus4</div>
+                                        </div>
+                                    </div>
+                                </div>           
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="section-training">
+            <div class="top-bar">Ear Training
+                <div>
+                    <span style="color: #a0b154; font-weight: bold;">✓</span>{{trainingRightAnswers}} <span style="color: #ce0000; font-weight: bold;">✘</span>{{trainingWrongAnswers}} acc {{getAccuracy()}}%
+                </div>
+            </div>
+            <div class="section-content">
+                <button class="custom-button start-training" (click)="toggleTrainingMode()">{{ !inEarTrainingMode ? "Start ear training" : "End ear training"}}</button>
+                @if(inEarTrainingMode){
+                    <div style="margin-left: 9px;">
+                        <div class="training-button-group">
+                            <div class="training-button-toggle">
+                                <button class="training-button custom-button" (click)="trainingSelect(ChordQuality.Diminished)" [disabled]="!trainingDiminishedEnabled" [class.correct]="selectedCorrectlyTraining(ChordQuality.Diminished)" [class.incorrect]="selectedIncorrectlyTraining(ChordQuality.Diminished)">Diminished</button>
+                                <label class="switch" style="margin-left: 5px;">
+                                    <input type="checkbox" id="training-diminished-toggle" name="training-diminished-toggle" [(ngModel)]="trainingDiminishedEnabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="training-button-toggle">
+                                <button class="training-button custom-button" (click)="trainingSelect(ChordQuality.Minor)" [disabled]="!trainingMinorEnabled" [class.correct]="selectedCorrectlyTraining(ChordQuality.Minor)" [class.incorrect]="selectedIncorrectlyTraining(ChordQuality.Minor)">Minor</button>
+                                <label class="switch" style="margin-left: 5px;">
+                                    <input type="checkbox" id="training-minor-toggle" name="training-minor-toggle" [(ngModel)]="trainingMinorEnabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="training-button-toggle">
+                                <button class="training-button custom-button" (click)="trainingSelect(ChordQuality.Major)" [disabled]="!trainingMajorEnabled" [class.correct]="selectedCorrectlyTraining(ChordQuality.Major)" [class.incorrect]="selectedIncorrectlyTraining(ChordQuality.Major)">Major</button>
+                                <label class="switch" style="margin-left: 5px;">
+                                    <input type="checkbox" id="training-major-toggle" name="training-major-toggle" [(ngModel)]="trainingMajorEnabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="training-button-toggle">
+                                <button class="training-button custom-button" (click)="trainingSelect(ChordQuality.Augmented)" [disabled]="!trainingAugmentedEnabled" [class.correct]="selectedCorrectlyTraining(ChordQuality.Augmented)" [class.incorrect]="selectedIncorrectlyTraining(ChordQuality.Augmented)">Augmented</button>
+                                <label class="switch" style="margin-left: 5px;">
+                                    <input type="checkbox" id="training-augmented-toggle" name="training-augmented-toggle" [(ngModel)]="trainingAugmentedEnabled">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="training-actions">
+                            <button class="custom-button" (click)="randomChordTraining()">New chord</button>
+                            <button class="custom-button" (click)="playChord()">Replay chord</button>
+                        </div>
+                        <div class="use-same-root-setting">
+                            <label>Use same root</label>
+                            <label class="switch" style="margin-left: 5px;">
+                                <input type="checkbox" id="training-same-root" name="training-same-root" [(ngModel)]="trainingUseSameRoot">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        @if(trainingMessage){
+                            <p class="message-warning">{{trainingMessage}}</p>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
